@@ -1,6 +1,6 @@
 /**
-*  Ajax Autocomplete for jQuery, version %version%
-*  (c) 2017 Tomas Kirda
+*  Ajax Autocomplete for jQuery, version 1.4.10
+*  (c) 2019 Tomas Kirda, George Stanescu & Kristian Holm Sejersen
 *
 *  Ajax Autocomplete for jQuery is freely distributable under the terms of an MIT-style license.
 *  For details, see the web site: https://github.com/devbridge/jQuery-Autocomplete
@@ -89,40 +89,40 @@
     $.Autocomplete = Autocomplete;
 
     Autocomplete.defaults = {
-            ajaxSettings: {},
-            autoSelectFirst: false,
-            appendTo: 'body',
-            serviceUrl: null,
-            lookup: null,
-            onSelect: null,
-            width: 'auto',
-            minChars: 1,
-            maxHeight: 300,
-            deferRequestBy: 0,
-            params: {},
-            formatResult: _formatResult,
-            formatGroup: _formatGroup,
-            delimiter: null,
-            zIndex: 9999,
-            type: 'GET',
-            noCache: false,
-            onSearchStart: noop,
-            onSearchComplete: noop,
-            onSearchError: noop,
-            preserveInput: false,
-            containerClass: 'autocomplete-suggestions',
-            tabDisabled: false,
-            dataType: 'text',
-            currentRequest: null,
-            triggerSelectOnValidInput: true,
-            preventBadQueries: true,
-            lookupFilter: _lookupFilter,
-            paramName: 'query',
-            transformResult: _transformResult,
-            showNoSuggestionNotice: false,
-            noSuggestionNotice: 'No results',
-            orientation: 'bottom',
-            forceFixPosition: false
+        ajaxSettings: {},
+        autoSelectFirst: false,
+        appendTo: 'body',
+        serviceUrl: null,
+        lookup: null,
+        onSelect: null,
+        width: 'auto',
+        minChars: 1,
+        maxHeight: 300,
+        deferRequestBy: 0,
+        params: {},
+        formatResult: _formatResult,
+        formatGroup: _formatGroup,
+        delimiter: null,
+        zIndex: 9999,
+        type: 'GET',
+        noCache: false,
+        onSearchStart: noop,
+        onSearchComplete: noop,
+        onSearchError: noop,
+        preserveInput: false,
+        containerClass: 'autocomplete-suggestions',
+        tabDisabled: false,
+        dataType: 'text',
+        currentRequest: null,
+        triggerSelectOnValidInput: true,
+        preventBadQueries: true,
+        lookupFilter: _lookupFilter,
+        paramName: 'query',
+        transformResult: _transformResult,
+        showNoSuggestionNotice: false,
+        noSuggestionNotice: 'No results',
+        orientation: 'bottom',
+        forceFixPosition: false
     };
 
     function _lookupFilter(suggestion, originalQuery, queryLowerCase) {
@@ -167,7 +167,7 @@
 
             // html() deals with many types: htmlString or Element or Array or jQuery
             that.noSuggestionsContainer = $('<div class="autocomplete-no-suggestion"></div>')
-                                          .html(this.options.noSuggestionNotice).get(0);
+                .html(this.options.noSuggestionNotice).get(0);
 
             that.suggestionsContainer = Autocomplete.utils.createNode(options.containerClass);
 
@@ -218,10 +218,6 @@
 
         onFocus: function () {
             var that = this;
-
-            if (that.disabled) {
-                return;
-            }
 
             that.fixPosition();
 
@@ -336,20 +332,20 @@
 
             // If container is not positioned to body,
             // correct its position using offset parent offset
-            if(containerParent !== document.body) {
+            if (containerParent !== document.body) {
                 var opacity = $container.css('opacity'),
                     parentOffsetDiff;
 
-                    if (!that.visible){
-                        $container.css('opacity', 0).show();
-                    }
+                if (!that.visible) {
+                    $container.css('opacity', 0).show();
+                }
 
                 parentOffsetDiff = $container.offsetParent().offset();
                 styles.top -= parentOffsetDiff.top;
                 styles.top += containerParent.scrollTop;
                 styles.left -= parentOffsetDiff.left;
 
-                if (!that.visible){
+                if (!that.visible) {
                     $container.css('opacity', opacity).hide();
                 }
             }
@@ -537,7 +533,7 @@
             return data;
         },
 
-        getSuggestions: function (q) {
+        getSuggestions: function (q, containerId) {
             var response,
                 that = this,
                 options = that.options,
@@ -554,8 +550,8 @@
 
             params = options.ignoreParams ? null : options.params;
 
-            if ($.isFunction(options.lookup)){
-                options.lookup(q, function (data) {
+            if ($.isFunction(options.lookup)) {
+                options.lookup(q, containerId, function (data) {
                     that.suggestions = data.suggestions;
                     that.suggest();
                     options.onSearchComplete.call(that.element, q, data.suggestions);
@@ -604,7 +600,7 @@
         },
 
         isBadQuery: function (q) {
-            if (!this.options.preventBadQueries){
+            if (!this.options.preventBadQueries) {
                 return false;
             }
 
@@ -658,16 +654,16 @@
                 html = '',
                 category,
                 formatGroup = function (suggestion, index) {
-                        var currentCategory = suggestion.data[groupBy];
+                    var currentCategory = suggestion.data[groupBy];
 
-                        if (category === currentCategory){
-                            return '';
-                        }
+                    if (category === currentCategory) {
+                        return '';
+                    }
 
-                        category = currentCategory;
+                    category = currentCategory;
 
-                        return options.formatGroup(suggestion, category);
-                    };
+                    return options.formatGroup(suggestion, category);
+                };
 
             if (options.triggerSelectOnValidInput && that.isExactMatch(value)) {
                 that.select(0);
@@ -676,7 +672,7 @@
 
             // Build suggestions inner HTML:
             $.each(that.suggestions, function (i, suggestion) {
-                if (groupBy){
+                if (groupBy) {
                     html += formatGroup(suggestion, value, i);
                 }
 
@@ -706,11 +702,11 @@
             that.findBestHint();
         },
 
-        noSuggestions: function() {
-             var that = this,
-                 beforeRender = that.options.beforeRender,
-                 container = $(that.suggestionsContainer),
-                 noSuggestionsContainer = $(that.noSuggestionsContainer);
+        noSuggestions: function () {
+            var that = this,
+                beforeRender = that.options.beforeRender,
+                container = $(that.suggestionsContainer),
+                noSuggestionsContainer = $(that.noSuggestionsContainer);
 
             this.adjustContainerWidth();
 
@@ -732,7 +728,7 @@
             that.visible = true;
         },
 
-        adjustContainerWidth: function() {
+        adjustContainerWidth: function () {
             var that = this,
                 options = that.options,
                 width,
@@ -744,7 +740,7 @@
             if (options.width === 'auto') {
                 width = that.el.outerWidth();
                 container.css('width', width > 0 ? width : 300);
-            } else if(options.width === 'flex') {
+            } else if (options.width === 'flex') {
                 // Trust the source! Unset the width property so it will be the max length
                 // the containing elements.
                 container.css('width', '');
@@ -795,10 +791,10 @@
             return suggestions;
         },
 
-        validateOrientation: function(orientation, fallback) {
+        validateOrientation: function (orientation, fallback) {
             orientation = $.trim(orientation || '').toLowerCase();
 
-            if($.inArray(orientation, ['auto', 'bottom', 'top']) === -1){
+            if ($.inArray(orientation, ['auto', 'bottom', 'top']) === -1) {
                 orientation = fallback;
             }
 
@@ -857,7 +853,6 @@
 
         select: function (i) {
             var that = this;
-            that.hide();
             that.onSelect(i);
         },
 
@@ -928,20 +923,33 @@
         onSelect: function (index) {
             var that = this,
                 onSelectCallback = that.options.onSelect,
-                suggestion = that.suggestions[index];
+                suggestion = that.suggestions[index],
+                containerId = '';
 
-            that.currentValue = that.getValue(suggestion.value);
+            if (suggestion && suggestion.data && suggestion.data.Type === "Address") {
+                that.hide();
+                that.suggestions = [];
 
-            if (that.currentValue !== that.el.val() && !that.options.preserveInput) {
-                that.el.val(that.currentValue);
+                that.currentValue = that.getValue(suggestion.value);
+
+                if (that.currentValue !== that.el.val() && !that.options.preserveInput) {
+                    that.el.val(that.currentValue);
+                }
+
+                that.signalHint(null);
+                that.selection = suggestion;
+
+                if ($.isFunction(onSelectCallback)) {
+                    onSelectCallback.call(that.element, suggestion);
+                }
             }
+            else {
+                //In case the suggestion is a container, re-query the addresses
+                containerId = suggestion.data.Id;
+                var value = that.el.val();
+                var query = that.getQuery(value);
 
-            that.signalHint(null);
-            that.suggestions = [];
-            that.selection = suggestion;
-
-            if ($.isFunction(onSelectCallback)) {
-                onSelectCallback.call(that.element, suggestion);
+                that.getSuggestions(query, containerId)
             }
         },
 
