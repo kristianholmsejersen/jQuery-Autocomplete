@@ -154,6 +154,10 @@
         return '<div class="autocomplete-group">' + category + '</div>';
     };
 
+    function _isContainer(dataType) {
+        return dataType !== "Address";
+    }
+
     Autocomplete.prototype = {
 
         initialize: function () {
@@ -677,7 +681,7 @@
                 }
 
                 var containerClass = '';
-                if (suggestion.data.Type !== "Address") {
+                if (_isContainer(suggestion.data.Type)) {
                     containerClass = ' expandable';
                 }
 
@@ -931,7 +935,7 @@
                 suggestion = that.suggestions[index],
                 containerId = '';
 
-            if (suggestion && suggestion.data && suggestion.data.Type === "Address") {
+            if (suggestion && suggestion.data && !_isContainer(suggestion.data.Type)) {
                 that.hide();
                 that.suggestions = [];
 
