@@ -676,7 +676,12 @@
                     html += formatGroup(suggestion, value, i);
                 }
 
-                html += '<div class="' + className + '" data-index="' + i + '">' + formatResult(suggestion, value, i) + '</div>';
+                var containerClass = '';
+                if (suggestion.data.Type !== "Address") {
+                    containerClass = ' expandable';
+                }
+
+                html += '<div class="' + className + containerClass + '" data-index="' + i + '">' + formatResult(suggestion, value, i) + '</div>';
             });
 
             this.adjustContainerWidth();
